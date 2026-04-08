@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2004 Honda Pilot — 235k Maintenance</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0e;
+    --surface: #161616;
+    --border: #2a2a2a;
+    --accent: #e8380d;
+    --accent2: #f5a623;
+    --text: #e8e8e8;
+    --muted: #888;
+    --red-row: rgba(232,56,13,0.08);
+    --yellow-row: rgba(245,166,35,0.08);
+    --green-row: rgba(80,200,120,0.07);
+    --done-bg: rgba(255,255,255,0.02);
+    --done-text: #444;
+  }
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+    body { background: #0e0e0e !important; color: #e8e8e8 !important; }
+    .table-wrap { border-color: #2a2a2a !important; }
+    thead tr { background: #1e1e1e !important; }
+    tr.priority-high { background: rgba(232,56,13,0.08) !important; }
+    tr.priority-med  { background: rgba(245,166,35,0.08) !important; }
+    tr.priority-low  { background: rgba(80,200,120,0.07) !important; }
+    tr.done          { background: rgba(255,255,255,0.02) !important; }
+    a { color: #f5a623 !important; }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: var(--bg); }
+  body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; min-height: 100vh; padding: 32px 20px 60px; }
+  header { margin-bottom: 24px; border-left: 4px solid var(--accent); padding-left: 16px; }
+  header h1 { font-family: 'Bebas Neue', sans-serif; font-size: 42px; letter-spacing: 2px; color: #fff; line-height: 1; }
+  header p { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); margin-top: 6px; letter-spacing: 1px; text-transform: uppercase; }
+  .progress-wrap { margin-bottom: 20px; display: flex; align-items: center; gap: 14px; }
+  .progress-bar-bg { flex: 1; height: 6px; background: #2a2a2a; border-radius: 3px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 3px; transition: width 0.4s ease; width: 0%; }
+  .progress-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); white-space: nowrap; min-width: 80px; }
+  .reset-btn { font-family: 'IBM Plex Mono', monospace; font-size: 10px; background: transparent; border: 1px solid #333; color: #666; padding: 4px 10px; border-radius: 2px; cursor: pointer; transition: all 0.15s; text-transform: uppercase; letter-spacing: 0.5px; }
+  .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .legend { display: flex; gap: 20px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  .dot-red { background: var(--accent); }
+  .dot-yellow { background: var(--accent2); }
+  .dot-green { background: #50c878; }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 4px; }
+  table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+  thead tr { background: #1e1e1e; border-bottom: 2px solid var(--accent); }
+  th { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); padding: 12px 14px; text-align: left; white-space: nowrap; }
+  th:first-child { width: 40px; color: var(--accent); }
+  th:nth-child(2) { color: var(--accent); }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s, opacity 0.3s; }
+  tbody tr:hover { filter: brightness(1.15); }
+  tbody tr.priority-high { background: var(--red-row); }
+  tbody tr.priority-med  { background: var(--yellow-row); }
+  tbody tr.priority-low  { background: var(--green-row); }
+  tbody tr.done { background: var(--done-bg) !important; opacity: 0.45; }
+  tbody tr.done td { color: var(--done-text) !important; }
+  tbody tr.done td:first-child { color: #555 !important; }
+  tbody tr.done .badge { opacity: 0.4; }
+  tbody tr.done a { color: #444 !important; pointer-events: none; }
+  tbody tr.done .price-diy, tbody tr.done .price-shop { color: #444 !important; }
+  tbody tr.done .consequence-text { color: #444 !important; }
+  td.check-cell { padding: 11px 10px 11px 14px; vertical-align: middle; text-align: center; }
+  .check-wrap { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border: 2px solid #333; border-radius: 3px; cursor: pointer; transition: all 0.15s; flex-shrink: 0; }
+  .check-wrap:hover { border-color: #50c878; }
+  .check-wrap.checked { background: #50c878; border-color: #50c878; }
+  .check-wrap svg { display: none; }
+  .check-wrap.checked svg { display: block; }
+  td { padding: 11px 14px; vertical-align: top; line-height: 1.5; color: var(--text); }
+  td:nth-child(2) { font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 11px; color: #fff; white-space: nowrap; min-width: 180px; }
+  .rank { display: inline-block; font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--muted); margin-right: 6px; vertical-align: middle; line-height: 1; }
+  .badge { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: 2px; text-transform: uppercase; letter-spacing: 0.5px; margin-left: 6px; vertical-align: middle; }
+  .badge-high { background: rgba(232,56,13,0.2); color: #ff6b4a; border: 1px solid rgba(232,56,13,0.3); }
+  .badge-med  { background: rgba(245,166,35,0.2); color: #f5c842; border: 1px solid rgba(245,166,35,0.3); }
+  .badge-low  { background: rgba(80,200,120,0.15); color: #50c878; border: 1px solid rgba(80,200,120,0.2); }
+  .price { font-family: 'IBM Plex Mono', monospace; font-size: 12px; white-space: nowrap; }
+  .price-diy  { color: #50c878; }
+  .price-shop { color: var(--accent2); }
+  .time { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #aaa; white-space: nowrap; }
+  .note { font-size: 10px; color: var(--muted); margin-top: 3px; font-family: 'IBM Plex Mono', monospace; }
+  .function-text  { font-size: 12px; color: #bbb; max-width: 200px; }
+  .consequence-text { font-size: 12px; color: #cc6655; max-width: 220px; }
+  .parts-col { min-width: 160px; }
+  .part-link { display: block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--accent2); text-decoration: none; padding: 3px 0; white-space: nowrap; transition: color 0.1s; }
+  .part-link:hover { color: #fff; text-decoration: underline; }
+  .part-link::before { content: '→ '; color: #555; }
+  .part-note { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: #555; margin-top: 2px; }
+  footer { margin-top: 24px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #555; letter-spacing: 0.5px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>2004 Honda Pilot — 235k Service Guide</h1>
+  <p>Sorted by importance &nbsp;·&nbsp; DIY = parts only &nbsp;·&nbsp; Shop = labor + parts &nbsp;·&nbsp; Click checkbox to mark done</p>
+</header>
+<div class="progress-wrap">
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">0 / 19 done</div>
+  <button class="reset-btn" onclick="resetAll()">Reset</button>
+</div>
+<div class="legend">
+  <div class="legend-item"><div class="dot dot-red"></div> High Priority</div>
+  <div class="legend-item"><div class="dot dot-yellow"></div> Medium Priority</div>
+  <div class="legend-item"><div class="dot dot-green"></div> Routine / Ongoing</div>
+</div>
+<div class="table-wrap">
+<table id="mainTable">
+  <thead>
+    <tr>
+      <th>✓</th>
+      <th>#&nbsp; Service</th>
+      <th>DIY Time</th>
+      <th>DIY Parts</th>
+      <th>Shop Cost</th>
+      <th>What It Does</th>
+      <th>What Goes Wrong If Skipped</th>
+      <th>Parts / Where to Buy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="priority-high">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">01</span>Timing Belt + Water Pump + Tensioner + Seals<span class="badge badge-high">Critical</span></td>
+      <td><span class="time">6–8 hrs</span><div class="note">Tough DIY, V6 is cramped</div></td>
+      <td><span class="price price-diy">$230–$330</span><div class="note">Aisin TKH-001 kit + seals</div></td>
+      <td><span class="price price-shop">$900–$1,400</span><div class="note">Dealer = $1,400–$1,800</div></td>
+      <td class="function-text">Keeps cam + crank synchronized so engine fires correctly. Water pump is driven by the timing belt on this engine.</td>
+      <td class="consequence-text">Belt snaps → pistons destroy open valves. Engine rebuild = $3,000–$5,000+ or junk the car.</td>
+      <td class="parts-col"><a class="part-link" href="https://www.rockauto.com/en/parts/aisin,TKH001,timing+belt+&+component+kit,5759" target="_blank">RockAuto — Aisin TKH-001 Kit</a><a class="part-link" href="https://www.amazon.com/Aisin-TKH-001-Engine-Timing-Water/dp/B008EEYTQA" target="_blank">Amazon — Aisin TKH-001</a></td>
+    </tr>
+    <tr class="priority-high">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">02</span>Valve Clearance Inspection + Adjust<span class="badge badge-high">Critical</span></td>
+      <td><span class="time">4–6 hrs</span><div class="note">Plenum must come off</div></td>
+      <td><span class="price price-diy">$50–$80</span><div class="note">Gaskets if adjustment needed</div></td>
+      <td><span class="price price-shop">$400–$600</span></td>
+      <td class="function-text">Maintains correct gap between valves and camshaft lobes so valves open and close fully.</td>
+      <td class="consequence-text">Tight exhaust valves burn out → head rebuild required. Common and expensive on neglected J35 engines.</td>
+      <td class="parts-col"><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,engine,valve+cover+gasket+set,4054" target="_blank">RockAuto — Valve Cover Gaskets</a><div class="part-note">Have a shop inspect; DIY requires feeler gauges</div></td>
+    </tr>
+    <tr class="priority-high">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">03</span>Transmission Fluid (3× Drain &amp; Fill)<span class="badge badge-high">Critical</span></td>
+      <td><span class="time">30 min × 3</span><div class="note">Space ~3k mi apart</div></td>
+      <td><span class="price price-diy">$30–$35</span><div class="note">Per session · Honda DW-1 only</div></td>
+      <td><span class="price price-shop">$80–$150</span><div class="note">Per drain/fill</div></td>
+      <td class="function-text">Lubricates and cools clutch packs, gears, and solenoids inside the automatic transmission.</td>
+      <td class="consequence-text">Slipping, rough shifts, overheating, total transmission failure. Replacement = $2,500–$4,500.</td>
+      <td class="parts-col"><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,transmission-automatic,transmission+fluid,11387" target="_blank">RockAuto — Honda DW-1 ATF</a><a class="part-link" href="https://www.rockauto.com/en/parts/aisin,ATFDW1,transmission+fluid,11387" target="_blank">RockAuto — Aisin DW-1 ATF</a></td>
+    </tr>
+    <tr class="priority-high">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">04</span>Coolant Flush<span class="badge badge-high">High</span></td>
+      <td><span class="time">1 hr</span></td>
+      <td><span class="price price-diy">$30–$40</span><div class="note">2 gal Honda blue + distilled water</div></td>
+      <td><span class="price price-shop">$100–$160</span></td>
+      <td class="function-text">Transfers engine heat to radiator, prevents freeze/boil, and protects aluminum components from corrosion.</td>
+      <td class="consequence-text">Acidic old coolant eats aluminum radiator, water pump, heater core. Leads to overheating and head gasket failure.</td>
+      <td class="parts-col"><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,cooling+system,antifreeze+%2f+coolant,10900" target="_blank">RockAuto — Honda Coolant</a><a class="part-link" href="https://www.amazon.com/s?k=honda+blue+coolant+type+2" target="_blank">Amazon — Honda Type 2 Coolant</a></td>
+    </tr>
+    <tr class="priority-high">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">05</span>Rear Differential Fluid<span class="badge badge-high">High</span></td>
+      <td><span class="time">20–30 min</span></td>
+      <td><span class="price price-diy">$15–$20</span><div class="note">Honda DPS-F, ~1 qt</div></td>
+      <td><span class="price price-shop">$80–$130</span></td>
+      <td class="function-text">Lubricates diff gears and powers the fluid-coupling clutch that engages rear wheels on the AWD system.</td>
+      <td class="consequence-text">Shuddering on turns, clutch pack wear, rear diff stops engaging. New rear diff = $800–$1,500+.</td>
+      <td class="parts-col"><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,transmission-automatic,differential+fluid,14282" target="_blank">RockAuto — Diff Fluid</a><a class="part-link" href="https://www.amazon.com/s?k=honda+DPS-F+differential+fluid" target="_blank">Amazon — Honda DPS-F</a></td>
+    </tr>
+    <tr class="priority-high">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">06</span>Brake Fluid Flush<span class="badge badge-high">High</span></td>
+      <td><span class="time">45 min – 1 hr</span></td>
+      <td><span class="price price-diy">$10–$15</span><div class="note">DOT 3 fluid</div></td>
+      <td><span class="price price-shop">$80–$120</span></td>
+      <td class="function-text">Transmits hydraulic pressure from pedal to calipers. Absorbs moisture over time (hygroscopic).</td>
+      <td class="consequence-text">Moisture lowers boiling point → brake fade. Also corrodes calipers and ABS components from the inside.</td>
+      <td class="parts-col"><a class="part-link" href="https://www.amazon.com/s?k=DOT+3+brake+fluid+honda" target="_blank">Amazon — DOT 3 Brake Fluid</a><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,brake,brake+fluid,10893" target="_blank">RockAuto — Brake Fluid</a></td>
+    </tr>
+    <tr class="priority-med">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">07</span>Spark Plugs (all 6)<span class="badge badge-med">Medium</span></td>
+      <td><span class="time">1.5–2 hrs</span><div class="note">Rear 3 require plenum removal</div></td>
+      <td><span class="price price-diy">$30–$50</span><div class="note">OEM NGK from RockAuto</div></td>
+      <td><span class="price price-shop">$200–$400</span><div class="note">Higher due to plenum labor</div></td>
+      <td class="function-text">Ignites the air/fuel mixture in each cylinder on the compression stroke.</td>
+      <td class="consequence-text">Misfires, rough idle, poor MPG, unburned fuel destroying catalytic converters ($400–$1,200 each).</td>
+      <td class="parts-col"><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,ignition,spark+plug,7212" target="_blank">RockAuto — NGK Spark Plugs</a><a class="part-link" href="https://www.amazon.com/s?k=NGK+spark+plugs+2004+Honda+Pilot+3.5" target="_blank">Amazon — NGK for 2004 Pilot</a></td>
+    </tr>
+    <tr class="priority-med">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">08</span>Engine Oil + Filter<span class="badge badge-med">Ongoing</span></td>
+      <td><span class="time">30 min</span></td>
+      <td><span class="price price-diy">$35–$50</span><div class="note">5 qts synthetic + filter</div></td>
+      <td><span class="price price-shop">$70–$110</span></td>
+      <td class="function-text">Lubricates all internal engine parts, carries away heat and contaminants, prevents metal-on-metal contact.</td>
+      <td class="consequence-text">Sludge buildup, bearing wear, cylinder wall scoring. At 235k use 5k intervals, not 7,500.</td>
+      <td class="parts-col"><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,engine,oil+filter,2604" target="_blank">RockAuto — Oil Filter</a><a class="part-link" href="https://www.amazon.com/s?k=5w20+high+mileage+synthetic+oil" target="_blank">Amazon — 5W-20 High Mileage Synthetic</a></td>
+    </tr>
+    <tr class="priority-med">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">09</span>Serpentine Belt + Tensioner<span class="badge badge-med">Medium</span></td>
+      <td><span class="time">30–45 min</span></td>
+      <td><span class="price price-diy">$55–$90</span><div class="note">Belt ~$30 + tensioner ~$45</div></td>
+      <td><span class="price price-shop">$150–$250</span></td>
+      <td class="function-text">Drives the alternator, A/C compressor, and power steering pump off the crankshaft.</td>
+      <td class="consequence-text">Snapped belt kills alternator + P/S instantly. Worn tensioner causes slipping and squealing before full failure.</td>
+      <td class="parts-col"><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,belt+drive,belt,2360" target="_blank">RockAuto — Serpentine Belt</a><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,belt+drive,belt+tensioner,2362" target="_blank">RockAuto — Belt Tensioner</a></td>
+    </tr>
+    <tr class="priority-med">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">10</span>Brake Pads + Rotors<span class="badge badge-med">Inspect</span></td>
+      <td><span class="time">1.5–2 hrs</span><div class="note">Per axle</div></td>
+      <td><span class="price price-diy">$80–$120</span><div class="note">Per axle</div></td>
+      <td><span class="price price-shop">$200–$400</span><div class="note">Per axle</div></td>
+      <td class="function-text">Friction material and disc that convert kinetic energy to heat to stop the vehicle.</td>
+      <td class="consequence-text">Metal on rotors → rotor damage. Seized caliper pins from dried grease cause brake drag, reduced MPG and stopping power.</td>
+      <td class="parts-col"><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,brake,disc+brake+pad,7952" target="_blank">RockAuto — Brake Pads</a><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,brake,disc+brake+rotor,7950" target="_blank">RockAuto — Rotors</a></td>
+    </tr>
+    <tr class="priority-med">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">11</span>Power Steering Fluid<span class="badge badge-med">Medium</span></td>
+      <td><span class="time">15–20 min</span><div class="note">Turkey baster method × 3</div></td>
+      <td><span class="price price-diy">$20–$25</span><div class="note">Honda P/S fluid</div></td>
+      <td><span class="price price-shop">$60–$100</span></td>
+      <td class="function-text">Hydraulic fluid that powers the steering assist rack and pump.</td>
+      <td class="consequence-text">Pump whine, stiff steering, rack wear. P/S rack replacement = $600–$1,200.</td>
+      <td class="parts-col"><a class="part-link" href="https://www.amazon.com/s?k=honda+power+steering+fluid+OEM" target="_blank">Amazon — Honda OEM P/S Fluid</a><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,steering,power+steering+fluid,11384" target="_blank">RockAuto — P/S Fluid</a></td>
+    </tr>
+    <tr class="priority-med">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">12</span>Suspension Inspection (tie rods, ball joints, bushings)<span class="badge badge-med">Inspect</span></td>
+      <td><span class="time">1 hr to inspect</span><div class="note">Replace time varies</div></td>
+      <td><span class="price price-diy">$20–$150</span><div class="note">Per component as needed</div></td>
+      <td><span class="price price-shop">$150–$500+</span><div class="note">Depends on what's worn</div></td>
+      <td class="function-text">Keeps wheels properly aligned and absorbs road inputs, maintaining stability and tire contact.</td>
+      <td class="consequence-text">Worn tie rods → wandering + uneven tire wear. Failed ball joint → wheel separation = loss of control.</td>
+      <td class="parts-col"><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,steering,tie+rod+end,9022" target="_blank">RockAuto — Tie Rod Ends</a><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,suspension,ball+joint,8666" target="_blank">RockAuto — Ball Joints</a></td>
+    </tr>
+    <tr class="priority-med">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">13</span>Driveshaft U-Joints<span class="badge badge-med">Inspect</span></td>
+      <td><span class="time">1–2 hrs</span></td>
+      <td><span class="price price-diy">$30–$60</span></td>
+      <td><span class="price price-shop">$150–$300</span></td>
+      <td class="function-text">Connects driveshaft to differentials, allows angles to change during suspension travel and wheel movement.</td>
+      <td class="consequence-text">Clunking and vibration at first, then driveshaft failure. Well past typical service life at 235k miles.</td>
+      <td class="parts-col"><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,driveline+%26+axles,universal+joint,8826" target="_blank">RockAuto — U-Joints</a></td>
+    </tr>
+    <tr class="priority-med">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">14</span>CV Axle Boot Inspection<span class="badge badge-med">Inspect</span></td>
+      <td><span class="time">20 min to inspect</span></td>
+      <td><span class="price price-diy">$60–$100</span><div class="note">Per axle if replacement needed</div></td>
+      <td><span class="price price-shop">$150–$300</span><div class="note">Per axle</div></td>
+      <td class="function-text">Rubber boot keeps grease in the CV joint and road debris out.</td>
+      <td class="consequence-text">Torn boot → grease out, debris in → CV joint destruction → clicking on turns, eventual axle failure.</td>
+      <td class="parts-col"><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,driveline+%26+axles,cv+axle+shaft,8792" target="_blank">RockAuto — CV Axle Shaft</a></td>
+    </tr>
+    <tr class="priority-med">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">15</span>PCV Valve<span class="badge badge-med">Medium</span></td>
+      <td><span class="time">10 min</span></td>
+      <td><span class="price price-diy">$10–$15</span><div class="note">OEM only — don't cheap out</div></td>
+      <td><span class="price price-shop">$50–$80</span></td>
+      <td class="function-text">Routes crankcase blow-by gases back through the intake. Relieves internal engine pressure.</td>
+      <td class="consequence-text">Clogged PCV → oil leaks from seals, sludge buildup, rough idle, blown gaskets over time.</td>
+      <td class="parts-col"><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,engine,pcv+valve,4152" target="_blank">RockAuto — PCV Valve</a><a class="part-link" href="https://www.amazon.com/s?k=2004+Honda+Pilot+PCV+valve+OEM" target="_blank">Amazon — OEM PCV Valve</a></td>
+    </tr>
+    <tr class="priority-low">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">16</span>Engine Air Filter<span class="badge badge-low">Routine</span></td>
+      <td><span class="time">5 min</span></td>
+      <td><span class="price price-diy">$15–$20</span></td>
+      <td><span class="price price-shop">$40–$70</span></td>
+      <td class="function-text">Filters dust, debris, and particulates from intake air before it enters the engine.</td>
+      <td class="consequence-text">Restricted airflow reduces power and MPG. Debris can enter the engine and cause premature wear.</td>
+      <td class="parts-col"><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,air+%26+fuel+delivery,air+filter,2459" target="_blank">RockAuto — Air Filter</a><a class="part-link" href="https://www.amazon.com/s?k=2004+Honda+Pilot+engine+air+filter" target="_blank">Amazon — Engine Air Filter</a></td>
+    </tr>
+    <tr class="priority-low">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">17</span>Cabin Air Filter<span class="badge badge-low">Routine</span></td>
+      <td><span class="time">5 min</span></td>
+      <td><span class="price price-diy">$10–$15</span></td>
+      <td><span class="price price-shop">$40–$80</span></td>
+      <td class="function-text">Filters air flowing into the HVAC system before it reaches the cabin.</td>
+      <td class="consequence-text">Dirty filter strains blower motor, reduces airflow, circulates dust and mold spores into the cabin.</td>
+      <td class="parts-col"><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,heat+%26+air+conditioning,cabin+air+filter,13614" target="_blank">RockAuto — Cabin Air Filter</a><a class="part-link" href="https://www.amazon.com/s?k=2004+Honda+Pilot+cabin+air+filter" target="_blank">Amazon — Cabin Air Filter</a></td>
+    </tr>
+    <tr class="priority-low">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">18</span>Battery<span class="badge badge-low">Inspect</span></td>
+      <td><span class="time">15 min</span></td>
+      <td><span class="price price-diy">$100–$130</span></td>
+      <td><span class="price price-shop">$130–$200</span><div class="note">Includes install</div></td>
+      <td class="function-text">Provides starting power and stabilizes electrical system voltage while the alternator handles load.</td>
+      <td class="consequence-text">Weak battery causes electrical gremlins, VSA/ABS warning lights, and overworks the alternator.</td>
+      <td class="parts-col"><a class="part-link" href="https://www.amazon.com/s?k=group+24+car+battery+honda+pilot" target="_blank">Amazon — Group 24 Battery</a><div class="part-note">Autozone / O'Reilly will test your current one free</div></td>
+    </tr>
+    <tr class="priority-low">
+      <td class="check-cell"><div class="check-wrap" onclick="toggleDone(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><polyline points="1,5 4.5,8.5 11,1" stroke="#0e0e0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></td>
+      <td><span class="rank">19</span>Fuel Filter<span class="badge badge-low">Routine</span></td>
+      <td><span class="time">30–45 min</span></td>
+      <td><span class="price price-diy">$15–$25</span></td>
+      <td><span class="price price-shop">$80–$130</span></td>
+      <td class="function-text">Catches rust, sediment, and debris from fuel before it reaches the injectors.</td>
+      <td class="consequence-text">Restricted fuel flow → rough running, poor MPG, injector clogging. Injector replacement = $300–$600+.</td>
+      <td class="parts-col"><a class="part-link" href="https://www.rockauto.com/en/catalog/honda,2004,pilot,3.5l+v6,1425574,air+%26+fuel+delivery,fuel+filter,4158" target="_blank">RockAuto — Fuel Filter</a><a class="part-link" href="https://www.amazon.com/s?k=2004+Honda+Pilot+fuel+filter" target="_blank">Amazon — Fuel Filter</a></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<footer>2004 Honda Pilot J35A4 3.5L V6 &nbsp;·&nbsp; AWD &nbsp;·&nbsp; 235,000 miles &nbsp;·&nbsp; Prices are estimates and may vary by region</footer>
+<script>
+  const STORAGE_KEY = 'pilot235k_done';
+  function getState() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; } }
+  function saveState(state) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {} }
+  function toggleDone(checkEl) {
+    const row = checkEl.closest('tr');
+    const idx = Array.from(document.querySelectorAll('#mainTable tbody tr')).indexOf(row);
+    const state = getState();
+    const isDone = !checkEl.classList.contains('checked');
+    checkEl.classList.toggle('checked', isDone);
+    row.classList.toggle('done', isDone);
+    state[idx] = isDone;
+    saveState(state);
+    updateProgress();
+  }
+  function updateProgress() {
+    const total = document.querySelectorAll('#mainTable tbody tr').length;
+    const done = document.querySelectorAll('#mainTable tbody tr.done').length;
+    const pct = Math.round((done / total) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = done + ' / ' + total + ' done';
+  }
+  function resetAll() {
+    document.querySelectorAll('.check-wrap').forEach(c => c.classList.remove('checked'));
+    document.querySelectorAll('#mainTable tbody tr').forEach(r => r.classList.remove('done'));
+    saveState({});
+    updateProgress();
+  }
+  window.addEventListener('DOMContentLoaded', () => {
+    const state = getState();
+    document.querySelectorAll('#mainTable tbody tr').forEach((row, idx) => {
+      if (state[idx]) { row.querySelector('.check-wrap').classList.add('checked'); row.classList.add('done'); }
+    });
+    updateProgress();
+  });
+</script>
+</body>
+</html>
